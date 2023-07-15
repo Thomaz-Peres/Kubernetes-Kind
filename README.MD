@@ -1,49 +1,47 @@
-# Para usar o serviço
+# To use the service
 
-I used [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/) to create a localo cluster
+I used [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/) to create a local cluster
 
-***obs*** os scripts abaixo é necessário rodar com o ponto final no final:
+***PS*** the scripts below is necessary run with the dot (.) in the final:
 
-Suba a imagem do docker:
+Build the image on docker:
 
      docker build -t ingress:1.0 .
 
-Depois que terminou de subir e quiser testar
+After finished do build and want to test:
 
     docker run -p 8001:80 ingress:1.0 .
 
-
-Em um terminal:
+In a terminal:
 
     curl http://localhost:8001/WeatherForecast
 
-
-Para criar o Cluster rode esses passos abaixo (depois de instalar o Kind):
+To create a 'Cluster' run this steps (After install Kind):
 
     kind create cluster --name ingress --config=Cluster/DeployCluster.yaml
 
-Pode verificar se o cluster está ok com:
+It is possible to check the Cluster with:
 
     kubectl cluster-info --context kind-ingress
 
-Depois de criar o Cluster no kind, precisamos adicionar a imagem da aplicação neste cluster com:
+After create the cluster on Kind, we need to add the app image in the cluster:
 
     kind load docker-image ingress:1.0 --name ingress
 
-Agora instalando o Deployment e Service:
+Now applying the Deployment and the Service:
 
     kubectl apply -f Deployment.yaml
 
     kubectl apply -f Service.yaml
 
-Se tentar fazer uma requisição para a porta 80, deve disparar um erro, então é necessário rodar o segundo comando:
+If try to made a request in the port 80, you will receive a error, so it's necessary run the follow command:
 
     kubectl port-forward svc/ingress-service <locahost-port>:<pod-port> (80:80)
 
-    o comando é necessário pois estamos utilizando ClusterIP.
+    The command it's necessary because we're using ClusterIP (only because I made some testings ).
 
-Este ultimo comando transfere a porta local 80 para o serviço 80
+This last command transfer the local port 80 to the service
 
-Depois de realizar o comando de transferencia de porta e para o serviço, ja deve funcionar a requisição, basta utilizar:
+After using the command, problaly will work, only need to use:
 
     curl http://localhost:80/WeatherForecast
