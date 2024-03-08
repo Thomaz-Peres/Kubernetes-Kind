@@ -40,12 +40,12 @@ Now applying the Deployment and the Service:
 
 If try to made a request in the port 80, you will receive a error, so it's necessary run the follow command:
 
-    kubectl port-forward svc/api-service <locahost-port>:<pod-port> (80:80)
+    kubectl port-forward svc/api-service 8001:80
 
     The command it's necessary because we're using ClusterIP (only because I made some testings ).
 
-This last command transfer the local port 80 to the service
+This last command transfer the local port 8001 to the service
 
 After using the command, problaly will work, only need to use:
 
-    curl http://localhost:80/WeatherForecast
+    curl http://localhost:8001/WeatherForecast
